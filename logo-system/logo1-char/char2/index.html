@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lokaya Gfx - Logo 1 Character 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #0a0a0f; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        header { padding: 1.5rem; }
+        .header-logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+        .header-logo img { width: 40px; height: 40px; border-radius: 10px; }
+        .header-logo span { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.9); }
+        .nav-buttons { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+        .nav-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #8b8b9a; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; text-decoration: none; font-family: 'Poppins', sans-serif; }
+        .nav-btn.active { background: #0084ff; border-color: #0084ff; color: #ffffff; box-shadow: 0 0 30px rgba(0,132,255,0.3); }
+        .nav-btn:hover { background: rgba(0,132,255,0.1); border-color: #0084ff; color: #ffffff; }
+        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 1rem 1.5rem 2rem; max-width: 560px; margin: 0 auto; width: 100%; }
+        .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #8b8b9a; padding: 0.6rem 1.2rem; border-radius: 10px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; text-decoration: none; transition: all 0.3s; margin-bottom: 1.5rem; align-self: flex-start; }
+        .back-btn:hover { border-color: #0084ff; color: #ffffff; }
+        .page-title { font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 0.4rem; }
+        .page-subtitle { color: #8b8b9a; font-size: 0.8rem; text-align: center; margin-bottom: 1.5rem; }
+        .preview-wrap { width: 100%; max-width: 420px; margin: 0 auto 1.75rem; position: relative; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,132,255,0.12); }
+        .preview-wrap img { width: 100%; display: block; }
+        .preview-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .preview-wrap:hover .preview-overlay { opacity: 1; }
+        .preview-tag { background: #0084ff; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.4rem 0.9rem; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .form-card { background: #13131a; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 1.5rem; width: 100%; margin-bottom: 1.25rem; }
+        .form-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: #8b8b9a; margin-bottom: 0.5rem; display: block; }
+        .form-input { width: 100%; background: #0a0a0f; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #ffffff; padding: 0.85rem 1rem; font-size: 0.95rem; font-family: 'Poppins', sans-serif; outline: none; transition: border-color 0.3s; margin-bottom: 1.25rem; }
+        .form-input:last-child { margin-bottom: 0; }
+        .form-input:focus { border-color: #0084ff; box-shadow: 0 0 0 3px rgba(0,132,255,0.12); }
+        .form-input::placeholder { color: #52525e; }
+        .download-btn { width: 100%; background: linear-gradient(135deg, #0084ff 0%, #0070dd 100%); color: #ffffff; border: none; padding: 1.1rem; border-radius: 14px; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-family: 'Poppins', sans-serif; box-shadow: 0 8px 30px rgba(0,132,255,0.3); transition: all 0.3s ease; }
+        .download-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,132,255,0.4); }
+        .download-btn:active { transform: scale(0.98); }
+        .hint { text-align: center; color: #52525e; font-size: 0.72rem; margin-top: 0.75rem; }
+        footer { padding: 2rem 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .footer-logo img { width: 36px; height: 36px; border-radius: 8px; }
+        .footer-logo span { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; }
+        .footer-copyright { color: #52525e; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; }
+        @media (max-width: 480px) { .page-title { font-size: 1.2rem; } .form-card { padding: 1.1rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="https://res.cloudinary.com/dsyvnaog6/image/upload/v1772862220/lokaya/avatars/tzfgxif1qzdwim1mrp42.png" alt="Lokaya Gfx">
+            <span>LOKAYA GFX</span>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="window.location.href='../../../index.html'">LOGOS</button>
+            <button class="nav-btn" onclick="window.location.href='../../../post-system/post-system.html'">POSTS</button>
+            <button class="nav-btn" onclick="alert('Coming Soon!')">THUMBNAILS</button>
+        </div>
+    </header>
+    <main>
+        <a href="../index.html" class="back-btn">&#8592; Back</a>
+        <h1 class="page-title">Logo 1 &#8212; Character 2</h1>
+        <p class="page-subtitle">Fill in your details and download your logo</p>
+        <div class="preview-wrap">
+            <img src="s1_c2.webp" alt="Logo 1 Character 2 Preview">
+            <div class="preview-overlay"><span class="preview-tag">Preview</span></div>
+        </div>
+        <div class="form-card">
+            <label class="form-label" for="input-name">Logo Name</label>
+            <input class="form-input" id="input-name" type="text" placeholder="e.g. LOKAYA" maxlength="20">
+            <label class="form-label" for="input-number">Number</label>
+            <input class="form-input" id="input-number" type="text" placeholder="e.g. 076 880 3361">
+            <label class="form-label" for="input-title">Title / Tag</label>
+            <input class="form-input" id="input-title" type="text" placeholder="e.g. GAMING EDITOR" maxlength="20">
+        </div>
+        <button class="download-btn" onclick="goRender()">GENERATE &amp; DOWNLOAD</button>
+        <p class="hint">You will be redirected to the rendering page</p>
+    </main>
+    <footer>
+        <div class="footer-logo">
+            <img src="https://res.cloudinary.com/dsyvnaog6/image/upload/v1772862220/lokaya/avatars/tzfgxif1qzdwim1mrp42.png" alt="Lokaya Gfx">
+            <span>LOKAYA GFX</span>
+        </div>
+        <p class="footer-copyright">&#169; 2026 LOKAYA GFX. ALL RIGHTS RESERVED.</p>
+    </footer>
+    <script>
+        function goRender() {
+            const name   = document.getElementById('input-name').value.trim();
+            const number = document.getElementById('input-number').value.trim();
+            const title  = document.getElementById('input-title').value.trim();
+            if (!name && !number && !title) {
+                alert('Please fill in at least one field.');
+                return;
+            }
+            const params = new URLSearchParams({
+                logoId: 'logo1',
+                char:   '2',
+                name:   name,
+                number: number,
+                title:  title
+            });
+            window.location.href = '../../rendering/index.html?' + params.toString();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Store Post - Lokaya Gfx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <style>
+        /* Progressive Soul Font */
+        @font-face {
+            font-family: 'Progressive Soul';
+            src: url('../assets/fonts/ProgressiveSoul.ttf') format('truetype'),
+                 url('../assets/fonts/ProgressiveSoul.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        /* Impact is system font, already available */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0f;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(0, 132, 255, 0.1);
+            border-color: #0084ff;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #0084ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #8b8b9a;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+        }
+        
+        .preview-section {
+            background: #15151a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #0084ff;
+        }
+        
+        .preview-container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 132, 255, 0.3);
+        }
+        
+        .form-section {
+            background: #15151a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.75rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        label {
+            display: block;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input {
+            width: 100%;
+            background: #0a0a0f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 0.875rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        input::placeholder {
+            color: #52525e;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #0084ff;
+            box-shadow: 0 0 0 3px rgba(0, 132, 255, 0.15);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #0084ff 0%, #0070dd 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            box-shadow: 0 6px 20px rgba(0, 132, 255, 0.3);
+            margin-top: 0.5rem;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 132, 255, 0.4);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../post-system.html" class="back-btn">← Back</a>
+    
+    <div class="container">
+        <h1>Account Store Post</h1>
+        <p class="subtitle">Create your account post</p>
+        
+        <!-- Static Preview -->
+        <div class="preview-section">
+            <h2 class="section-title">Preview</h2>
+            <div class="preview-container">
+                <img src="../../assets/posts/preview1.webp" alt="Preview" class="preview-image" style="max-width: 100%; border-radius: 12px; border: 2px solid rgba(0, 132, 255, 0.3);">
+            </div>
+            <p style="text-align: center; color: #8b8b9a; font-size: 0.7rem; margin-top: 0.5rem;">
+                💡 Generates high-quality post using PSD
+            </p>
+        </div>
+        
+        <!-- Form -->
+        <div class="form-section">
+            <h2 class="section-title">Customize Details</h2>
+            
+            <div class="input-group">
+                <label for="name1">Name</label>
+                <input type="text" 
+                       id="name1" 
+                       placeholder="e.g., LOKAYA" 
+                       autocomplete="off">
+            </div>
+            
+
+            
+            <div class="input-group">
+                <label for="number">Contact Number</label>
+                <input type="text" 
+                       id="number" 
+                       placeholder="e.g., 076 880 3361" 
+                       autocomplete="off">
+            </div>
+            
+            <button class="generate-btn" onclick="generatePost()">Generate Post</button>
+        </div>
+    </div>
+    
+    <script>
+        <!-- Generate button function remains the same -->
+        function generatePost() {
+            const name1 = document.getElementById('name1').value.trim();
+            const number = document.getElementById('number').value.trim();
+            
+            if (!name1 || !number) {
+                alert('⚠️ Please fill in all fields!\n\n• Name\n• Contact Number');
+                return;
+            }
+            
+            // Build URL parameters
+            const params = new URLSearchParams({
+                postId: 'post1',
+                name1: name1,
+                number: number
+            });
+            
+            // Redirect to rendering page
+            window.location.href = `../rendering/index.html?${params.toString()}`;
+        }
+        
+        // Enter key to submit
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                generatePost();
+            }
+        });
+    </script>
+</body>
+</html>

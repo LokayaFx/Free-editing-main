@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendering Logo - Lokaya Gfx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .render-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .spinner {
+            width: 100px;
+            height: 100px;
+            border: 6px solid rgba(0, 132, 255, 0.1);
+            border-top: 6px solid #0084ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 40px;
+            box-shadow: 0 0 40px rgba(0, 132, 255, 0.3);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #0084ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .status {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 132, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 132, 255, 0.2) inset;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0084ff, #0070dd, #0084ff);
+            background-size: 200% 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: shimmer 2s infinite;
+            box-shadow: 0 0 20px rgba(0, 132, 255, 0.8);
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .percentage {
+            color: #0084ff;
+            font-size: 48px;
+            font-weight: 800;
+            margin: 20px 0;
+            text-shadow: 0 0 30px rgba(0, 132, 255, 0.5);
+        }
+        
+        .details {
+            background: rgba(0, 132, 255, 0.05);
+            border: 1px solid rgba(0, 132, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .detail-value {
+            color: #0084ff;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .error-container {
+            display: none;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        .error-container.active {
+            display: block;
+        }
+        
+        .error-title {
+            color: #ef4444;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .error-message {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #0084ff 0%, #0070dd 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 132, 255, 0.3);
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="render-container">
+        <div class="spinner"></div>
+        
+        <h1>Generating Your Logo</h1>
+        <p class="status" id="status">Initializing...</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="percentage" id="percentage">0%</div>
+        
+        <div class="details" id="details">
+            <div class="detail-item">
+                <span class="detail-label">Logo Name</span>
+                <span class="detail-value" id="display-name">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Logo Style</span>
+                <span class="detail-value">Simple Classic</span>
+            </div>
+        </div>
+        
+        <div class="error-container" id="error-container">
+            <div class="error-title">❌ Export Failed</div>
+            <p class="error-message" id="error-message"></p>
+            <a href="../" class="btn">← Back to Editor</a>
+        </div>
+    </div>
+    
+    <div class="footer">Lokaya Gfx - Electric Blue Theme</div>
+    
+    <script src="../js/render.js"></script>
+</body>
+</html>

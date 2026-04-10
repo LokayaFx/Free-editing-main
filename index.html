@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lokaya Gfx - Free Fire Logo Maker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        header {
+            padding: 1.5rem;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .header-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+        
+        .header-logo span {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #8b8b9a;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn.active {
+            background: #0084ff;
+            border-color: #0084ff;
+            color: #ffffff;
+            box-shadow: 0 0 30px rgba(0, 132, 255, 0.3);
+        }
+        
+        .nav-btn:not(.active):active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 1.5rem 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Hero Text */
+        .hero-line {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+        
+        .hero-description {
+            color: #8b8b9a;
+            font-size: 0.75rem;
+            margin-top: 1.25rem;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+        
+        /* Logo Preview */
+        .logo-preview {
+            width: 100%;
+            max-width: 300px;
+            aspect-ratio: 1;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 132, 255, 0.2);
+        }
+        
+        /* Title */
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+        
+        /* Grid */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .post-card {
+            background: #15151a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+            border-color: #0084ff;
+            box-shadow: 0 10px 40px rgba(0, 132, 255, 0.2);
+        }
+        
+        .post-preview-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .post-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+        }
+        
+        /* Button */
+        .explore-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #0084ff 0%, #0070dd 100%);
+            color: #ffffff;
+            border: none;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-top: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 132, 255, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .explore-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 132, 255, 0.4);
+        }
+        
+        .explore-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-logo img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+        }
+        
+        .footer-logo span {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+        
+        .footer-text {
+            color: #8b8b9a;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        
+        .footer-copyright {
+            color: #52525e;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.25rem;
+        }
+        
+        .contact-btn {
+            display: inline-block;
+            background: #0084ff;
+            color: #ffffff;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(0, 132, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* Responsive */
+        @media (min-width: 768px) {
+            /* Desktop adjustments */
+            body {
+                font-size: 18px;
+            }
+            
+            .header-logo img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .header-logo span {
+                font-size: 1.1rem;
+            }
+            
+            .nav-btn {
+                padding: 0.875rem 2rem;
+                font-size: 0.85rem;
+            }
+            
+            .hero-line {
+                font-size: 4rem;
+            }
+            
+            .hero-description {
+                font-size: 0.9rem;
+                margin-top: 1.75rem;
+            }
+            
+            main {
+                padding: 2rem 2rem 3rem;
+                max-width: 800px;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            input, .download-btn {
+                font-size: 1rem;
+                padding: 1.25rem 1.75rem;
+            }
+            
+            .post-title {
+                font-size: 1.1rem;
+            }
+            
+            .footer-logo img {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .footer-logo span {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Mobile adjustments */
+            .header-logo span {
+                font-size: 0.75rem;
+            }
+            
+            .nav-btn {
+                font-size: 0.65rem;
+                padding: 0.625rem 1rem;
+            }
+            
+            .post-title {
+                font-size: 0.95rem;
+            }
+            
+            input, .download-btn {
+                font-size: 0.875rem;
+                padding: 0.875rem 1.25rem;
+            }
+            
+            h2 {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            /* Very small mobile */
+            .nav-btn {
+                font-size: 0.6rem;
+                padding: 0.5rem 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-logo">
+            <img src="https://res.cloudinary.com/dsyvnaog6/image/upload/v1772862220/lokaya/avatars/tzfgxif1qzdwim1mrp42.png" alt="Lokaya Gfx">
+            <span>LOKAYA GFX</span>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn active">HOME</button>
+            <button class="nav-btn" onclick="window.location.href='post-system/post-system.html'">POSTS</button>
+            <button class="nav-btn" onclick="alert('Coming Soon!')">THUMBNAILS</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Text -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 class="hero-line">
+                <span style="background: linear-gradient(135deg, #ffffff 0%, #0084ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">CRAFT YOUR</span>
+            </h1>
+            <h1 class="hero-line">
+                <span style="background: linear-gradient(135deg, #ffffff 0%, #0084ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">LEGEND</span>
+            </h1>
+            <h1 class="hero-line" style="color: #0084ff;">
+                VISUALLY
+            </h1>
+            <p class="hero-description">
+                Premium Free Fire logos, banners & overlays — built for squads who demand elite visual identity.
+            </p>
+        </div>
+        
+        <div class="post-grid" style="width: 100%; max-width: 800px; margin: 0 auto;">
+            <a href="logo-system/logo1-char/index.html" class="post-card">
+                <img class="post-preview-img" src="assets/logos/s1_c1.png" alt="Logo 1">
+                <span class="post-title">Logo 1</span>
+            </a>
+            <a href="logo-system/logo2-char/index.html" class="post-card">
+                <img class="post-preview-img" src="https://via.placeholder.com/400x400/15151a/0084ff?text=Logo+2&font=Poppins" alt="Logo 2">
+                <span class="post-title">Logo 2</span>
+            </a>
+            <a href="logo-system/logo3-char/index.html" class="post-card">
+                <img class="post-preview-img" src="https://via.placeholder.com/400x400/15151a/0084ff?text=Logo+3&font=Poppins" alt="Logo 3">
+                <span class="post-title">Logo 3</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <img src="https://res.cloudinary.com/dsyvnaog6/image/upload/v1772862220/lokaya/avatars/tzfgxif1qzdwim1mrp42.png" alt="Lokaya Gfx">
+            <span>LOKAYA GFX</span>
+        </div>
+        <p class="footer-text">Premium Free Fire design studio delivering elite visual identity for competitive squads.</p>
+        <p class="footer-copyright">© 2026 LOKAYA GFX. ALL RIGHTS RESERVED.</p>
+        <a href="https://lnk.bio/LokayaFx" target="_blank" class="contact-btn">CONTACT US</a>
+    </footer>
+
+    <!-- End -->
+</body>
+</html>

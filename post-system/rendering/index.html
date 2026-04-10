@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generating Post - Lokaya Gfx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0f;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .render-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(0, 132, 255, 0.1);
+            border-top: 5px solid #0084ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 30px rgba(0, 132, 255, 0.3);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #0084ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .status {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 132, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0084ff, #0070dd);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 132, 255, 0.8);
+        }
+        
+        .percentage {
+            color: #0084ff;
+            font-size: 36px;
+            font-weight: 800;
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(0, 132, 255, 0.5);
+        }
+        
+        .details {
+            background: rgba(0, 132, 255, 0.05);
+            border: 1px solid rgba(0, 132, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+        
+        .detail-label {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .detail-value {
+            color: #0084ff;
+            font-weight: 700;
+        }
+        
+        .error-container {
+            display: none;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .error-container.active {
+            display: block;
+        }
+        
+        .error-title {
+            color: #ef4444;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #0084ff 0%, #0070dd 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 13px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 132, 255, 0.3);
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        #postCanvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="render-container">
+        <div class="spinner"></div>
+        
+        <h1>Generating Your Post</h1>
+        <p class="status" id="status">Initializing canvas...</p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        
+        <div class="percentage" id="percentage">0%</div>
+        
+        <div class="details" id="details">
+            <div class="detail-item">
+                <span class="detail-label">Name</span>
+                <span class="detail-value" id="display-name1">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Number</span>
+                <span class="detail-value" id="display-number">-</span>
+            </div>
+        </div>
+        
+        <div class="error-container" id="error-container">
+            <div class="error-title">❌ Generation Failed</div>
+            <p class="error-message" id="error-message"></p>
+            <a href="../post-system.html" class="btn">← Back to Posts</a>
+        </div>
+    </div>
+    
+    <!-- API engine loaded dynamically -->
+    
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('postId') || 'post1';
+        const userData = {
+            name1: urlParams.get('name1') || '',
+            number: urlParams.get('number') || '',
+            number_wa: urlParams.get('number_wa') || ''
+        };
+        
+        // Display user data
+        document.getElementById('display-name1').textContent = userData.name1 || '-';
+        document.getElementById('display-number').textContent = userData.number || '-';
+        
+        // Add number_wa if it's there
+        if (userData.number_wa) {
+            const detailsDiv = document.getElementById('details');
+            const waDiv = document.createElement('div');
+            waDiv.className = 'detail-item';
+            waDiv.innerHTML = '<span class="detail-label">WhatsApp</span><span class="detail-value">' + userData.number_wa + '</span>';
+            detailsDiv.appendChild(waDiv);
+        }
+        
+        const script = document.createElement('script');
+        script.src = `../js/photopea-${postId}.js`;
+        script.onload = () => {
+            // Progress simulation
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                
+                document.getElementById('progress-fill').style.width = progress + '%';
+                document.getElementById('percentage').textContent = Math.round(progress) + '%';
+            }, 200);
+            
+            // Status updates
+            const statuses = [
+                'Loading background image...',
+                'Applying transformations...',
+                'Rendering typography...',
+                'Applying styles...',
+                'Rendering contact details...',
+                'Finalizing post...',
+                'Preparing download...'
+            ];
+            
+            let statusIndex = 0;
+            const statusInterval = setInterval(() => {
+                if (statusIndex < statuses.length) {
+                    document.getElementById('status').textContent = statuses[statusIndex];
+                    statusIndex++;
+                }
+            }, 800);
+            
+            // Start rendering after brief delay
+            setTimeout(async () => {
+                try {
+                    const success = await renderPost(userData);
+                    
+                    if (success) {
+                        // Complete progress
+                        clearInterval(progressInterval);
+                        clearInterval(statusInterval);
+                        
+                        document.getElementById('progress-fill').style.width = '100%';
+                        document.getElementById('percentage').textContent = '100%';
+                        document.getElementById('status').textContent = 'Download started!';
+                        
+                        // Redirect back after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = '../post-system.html';
+                        }, 2000);
+                    } else {
+                        throw new Error('Rendering failed');
+                    }
+                    
+                } catch (error) {
+                    clearInterval(progressInterval);
+                    clearInterval(statusInterval);
+                    
+                    document.querySelector('.spinner').style.display = 'none';
+                    document.getElementById('status').style.display = 'none';
+                    document.querySelector('.progress-bar').style.display = 'none';
+                    document.getElementById('percentage').style.display = 'none';
+                    
+                    document.getElementById('error-message').textContent = 
+                        'Failed to generate post. Please check that all fields are filled correctly and try again.';
+                    document.getElementById('error-container').classList.add('active');
+                }
+            }, 1000);
+        };
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>
