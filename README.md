@@ -34,13 +34,13 @@ Lokaya gFx Logo Maker is a **free, web-based tool** for creating professional Fr
 
 ### Live Demo
 
-Visit **[lokayafx.github.io/Free-editing](https://lokayafx.github.io/Free-editing/)** to try it now!
+Visit **[lokayafx.github.io/Free-editing](https://lokayafx.github.io/Free-editing-main/)** to try it now!
 
 ### Local Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/LokayaFx/Free-editing.git
+git clone https://github.com/LokayaFx/Free-editing-main.git
 
 # Navigate to directory
 cd Free-editing
