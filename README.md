@@ -7,8 +7,8 @@
 **Premium Free Fire Logo Generator**  
 *Craft your legend visually*
 
-[![Live Demo](https://img.shields.io/badge/demo-live-0084ff?style=for-the-badge)](https://lokayafx.github.io/Free-editing/)
-[![Version](https://img.shields.io/badge/version-2.0.0-0084ff?style=for-the-badge)](https://github.com/LokayaFx/Free-editing/releases)
+[![Live Demo](https://img.shields.io/badge/demo-live-0084ff?style=for-the-badge)](https://lokayafx.github.io/Free-editing-main/)
+[![Version](https://img.shields.io/badge/version-2.0.0-0084ff?style=for-the-badge)](https://github.com/LokayaFx/Free-editing-main/releases)
 [![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-0084ff?style=for-the-badge)](LICENSE)
 
 </div>
