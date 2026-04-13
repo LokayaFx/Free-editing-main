@@ -7,8 +7,8 @@
 **Premium Free Fire Logo Generator**  
 *Craft your legend visually*
 
-[![Live Demo](https://img.shields.io/badge/demo-live-0084ff?style=for-the-badge)](https://lokayafx.github.io/Free-editing/)
-[![Version](https://img.shields.io/badge/version-2.0.0-0084ff?style=for-the-badge)](https://github.com/LokayaFx/Free-editing/releases)
+[![Live Demo](https://img.shields.io/badge/demo-live-0084ff?style=for-the-badge)](https://lokayafx.github.io/Free-editing-main/)
+[![Version](https://img.shields.io/badge/version-2.0.0-0084ff?style=for-the-badge)](https://github.com/LokayaFx/Free-editing-main/releases)
 [![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-0084ff?style=for-the-badge)](LICENSE)
 
 </div>
@@ -34,13 +34,13 @@ Lokaya gFx Logo Maker is a **free, web-based tool** for creating professional Fr
 
 ### Live Demo
 
-Visit **[lokayafx.github.io/Free-editing](https://lokayafx.github.io/Free-editing/)** to try it now!
+Visit **[lokayafx.github.io/Free-editing](https://lokayafx.github.io/Free-editing-main/)** to try it now!
 
 ### Local Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/LokayaFx/Free-editing.git
+git clone https://github.com/LokayaFx/Free-editing-main.git
 
 # Navigate to directory
 cd Free-editing
