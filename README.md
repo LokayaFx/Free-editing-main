@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Lokaya gFx Logo](https://res.cloudinary.com/dsyvnaog6/image/upload/v1772862220/lokaya/avatars/tzfgxif1qzdwim1mrp42.png)
+![Lokaya Gfx Logo](https://res.cloudinary.com/dsyvnaog6/image/upload/v1772862220/lokaya/avatars/tzfgxif1qzdwim1mrp42.png)
 
 **Premium Free Fire Logo Generator**  
 *Craft your legend visually*
@@ -17,7 +17,7 @@
 
 ## 🎯 Overview
 
-Lokaya gFx Logo Maker is a **free, web-based tool** for creating professional Free Fire gaming logos. Built with modern web technologies and featuring an electric blue premium design, it offers instant logo generation with customizable text fields.
+Lokaya Gfx Logo Maker is a **free, web-based tool** for creating professional Free Fire gaming logos. Built with modern web technologies and featuring an electric blue premium design, it offers instant logo generation with customizable text fields.
 
 ### ✨ Key Features
 
@@ -34,7 +34,7 @@ Lokaya gFx Logo Maker is a **free, web-based tool** for creating professional Fr
 
 ### Live Demo
 
-Visit **[lokayafx.github.io/Free-editing](https://lokayafx.github.io/Free-editing-main/)** to try it now!
+Visit **[lokayafx.github.io/Free-editing-main](https://lokayafx.github.io/Free-editing-main/)** to try it now!
 
 ### Local Development
 
