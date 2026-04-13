@@ -17,43 +17,141 @@
         .header-logo img { width: 40px; height: 40px; border-radius: 10px; }
         .header-logo span { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255, 255, 255, 0.9); }
         .nav-buttons { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
-        .nav-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: #8b8b9a; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+        .nav-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: #8b8b9a; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; text-decoration: none; font-family: 'Poppins', sans-serif; }
         .nav-btn.active { background: #0084ff; border-color: #0084ff; color: #ffffff; box-shadow: 0 0 30px rgba(0, 132, 255, 0.3); }
         .nav-btn:hover { background: rgba(0, 132, 255, 0.1); border-color: #0084ff; color: #ffffff; }
 
         /* Main */
         main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 1rem 1.5rem 2rem; max-width: 900px; margin: 0 auto; width: 100%; }
-        h2 { font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #ffffff; }
-        .subtitle { color: #8b8b9a; font-size: 0.85rem; text-align: center; margin-bottom: 2rem; }
-
-        /* Grid */
-        .char-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; }
-        .char-card { background: #15151a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; overflow: hidden; cursor: pointer; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: all 0.3s ease; }
-        .char-card:hover { transform: translateY(-4px); border-color: #0084ff; box-shadow: 0 10px 40px rgba(0, 132, 255, 0.2); }
-        .char-card:active { transform: scale(0.97); }
-        .char-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #1a1a22; display: flex; align-items: center; justify-content: center; color: #8b8b9a; font-size: 0.75rem; }
-        .char-img img { width: 100%; height: 100%; object-fit: cover; }
-        .char-label { padding: 0.6rem; font-size: 0.8rem; font-weight: 600; color: #ffffff; text-align: center; }
 
         /* Back button */
         .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #8b8b9a; padding: 0.6rem 1.2rem; border-radius: 10px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; text-decoration: none; transition: all 0.3s; margin-bottom: 1.5rem; align-self: flex-start; }
         .back-btn:hover { border-color: #0084ff; color: #ffffff; }
 
+        /* Title */
+        h2 { font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 0.4rem; }
+        .subtitle { color: #8b8b9a; font-size: 0.82rem; text-align: center; margin-bottom: 2rem; }
+
+        /* Character Grid */
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .char-card {
+            background: #13131a;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 18px;
+            overflow: hidden;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .char-card:hover {
+            transform: translateY(-5px);
+            border-color: #0084ff;
+            box-shadow: 0 12px 40px rgba(0,132,255,0.22);
+        }
+
+        .char-card:active { transform: scale(0.97); }
+
+        /* Image area */
+        .char-img-wrap {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .char-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .char-card:hover .char-img-wrap img {
+            transform: scale(1.06);
+        }
+
+        /* Hover overlay */
+        .char-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,132,255,0.55) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 0.75rem;
+        }
+
+        .char-card:hover .char-overlay { opacity: 1; }
+
+        .char-overlay-text {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #fff;
+            background: #0084ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+        }
+
+        /* Label */
+        .char-label {
+            padding: 0.65rem 0.5rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            width: 100%;
+            background: #13131a;
+        }
+
+        /* Number badge */
+        .char-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #8b8b9a;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
         /* Footer */
-        footer { padding: 2rem 1.5rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        .footer-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1rem; }
-        .footer-logo img { width: 40px; height: 40px; border-radius: 10px; }
-        .footer-logo span { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; }
+        footer { padding: 2rem 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .footer-logo img { width: 36px; height: 36px; border-radius: 8px; }
+        .footer-logo span { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; }
         .footer-copyright { color: #52525e; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; }
 
         @media (max-width: 480px) {
-            .char-grid { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
-            .char-label { font-size: 0.7rem; padding: 0.4rem; }
+            .char-grid { gap: 0.65rem; }
             h2 { font-size: 1.3rem; }
+            .char-label { font-size: 0.72rem; padding: 0.5rem; }
         }
     </style>
 </head>
 <body>
+
     <!-- Header -->
     <header>
         <div class="header-logo">
@@ -71,46 +169,102 @@
     <!-- Main Content -->
     <main>
         <a href="../../index.html" class="back-btn">← Back to Logos</a>
+
         <h2>Logo 2 — Select Character</h2>
-        <p class="subtitle">Choose your character style below</p>
+        <p class="subtitle">select your character style</p>
 
         <div class="char-grid">
+
+            <!-- Character 1 -->
             <a href="char1/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 1" onerror="this.parentElement.innerText='C1'"></div>
+                <div class="char-img-wrap">
+                    <img src="char1/s2_c1.webp" alt="Character 1" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C1</span>
+                </div>
                 <div class="char-label">Character 1</div>
             </a>
+
+            <!-- Character 2 -->
             <a href="char2/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 2" onerror="this.parentElement.innerText='C2'"></div>
+                <div class="char-img-wrap">
+                    <img src="char2/s2_c2.webp" alt="Character 2" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C2</span>
+                </div>
                 <div class="char-label">Character 2</div>
             </a>
+
+            <!-- Character 3 -->
             <a href="char3/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 3" onerror="this.parentElement.innerText='C3'"></div>
+                <div class="char-img-wrap">
+                    <img src="char3/s2_c3.webp" alt="Character 3" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C3</span>
+                </div>
                 <div class="char-label">Character 3</div>
             </a>
+
+            <!-- Character 4 -->
             <a href="char4/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 4" onerror="this.parentElement.innerText='C4'"></div>
+                <div class="char-img-wrap">
+                    <img src="char4/s2_c4.webp" alt="Character 4" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C4</span>
+                </div>
                 <div class="char-label">Character 4</div>
             </a>
+
+            <!-- Character 5 -->
             <a href="char5/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 5" onerror="this.parentElement.innerText='C5'"></div>
+                <div class="char-img-wrap">
+                    <img src="char5/s2_c5.webp" alt="Character 5" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C5</span>
+                </div>
                 <div class="char-label">Character 5</div>
             </a>
+
+            <!-- Character 6 -->
             <a href="char6/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 6" onerror="this.parentElement.innerText='C6'"></div>
+                <div class="char-img-wrap">
+                    <img src="char6/s2_c6.webp" alt="Character 6" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C6</span>
+                </div>
                 <div class="char-label">Character 6</div>
             </a>
+
+            <!-- Character 7 -->
             <a href="char7/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 7" onerror="this.parentElement.innerText='C7'"></div>
+                <div class="char-img-wrap">
+                    <img src="char7/s2_c7.webp" alt="Character 7" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C7</span>
+                </div>
                 <div class="char-label">Character 7</div>
             </a>
+
+            <!-- Character 8 -->
             <a href="char8/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 8" onerror="this.parentElement.innerText='C8'"></div>
+                <div class="char-img-wrap">
+                    <img src="char8/s2_c8.webp" alt="Character 8" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C8</span>
+                </div>
                 <div class="char-label">Character 8</div>
             </a>
+
+            <!-- Character 9 -->
             <a href="char9/index.html" class="char-card">
-                <div class="char-img"><img src="../../assets/logos/s1_c1.png" alt="Character 9" onerror="this.parentElement.innerText='C9'"></div>
+                <div class="char-img-wrap">
+                    <img src="char9/s2_c9.webp" alt="Character 9" onerror="this.src='../../assets/logos/s1_c1.png'">
+                    <div class="char-overlay"><span class="char-overlay-text">Select</span></div>
+                    <span class="char-badge">C9</span>
+                </div>
                 <div class="char-label">Character 9</div>
             </a>
+
         </div>
     </main>
 
@@ -122,5 +276,6 @@
         </div>
         <p class="footer-copyright">© 2026 LOKAYA GFX. ALL RIGHTS RESERVED.</p>
     </footer>
+
 </body>
 </html>
