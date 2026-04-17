@@ -116,7 +116,6 @@ bot.action(/^sys_(\d)$/, async (ctx) => {
     await ctx.reply(`System ${sysId} Characters:`);
     
     const media = [];
-    const buttons = [];
     for (let i = 1; i <= 9; i++) {
         media.push({ type: 'photo', media: `${BASE_URL}/logo-system/logo${sysId}-char/char${i}/s${sysId}_c${i}.webp` });
     }
