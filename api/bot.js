@@ -1,5 +1,5 @@
 const { Telegraf, Markup } = require('telegraf');
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chromium');
 const puppeteer = require('puppeteer-core');
 
 // Configuration
@@ -43,7 +43,7 @@ async function renderPhotopea(templateId, data) {
     try {
         browser = await puppeteer.launch({
             args: [...chromium.args, "--no-sandbox"],
-            executablePath: await chromium.executablePath,
+            executablePath: await chromium.executablePath(),
             headless: chromium.headless,
         });
         const page = await browser.newPage();
