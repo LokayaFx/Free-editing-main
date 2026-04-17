@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lokayafx.github.io/Free-editing-main/sitemap.xml
