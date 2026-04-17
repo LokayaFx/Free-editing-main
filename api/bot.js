@@ -25,66 +25,74 @@ for (let s = 1; s <= 3; s++) {
     }
 }
 
-// Initialize Bot
 const bot = new Telegraf(BOT_TOKEN);
 const userState = new Map();
 
-// Helper: Process Rendering
 async function renderPhotopea(templateId, data) {
     const template = TEMPLATES[templateId];
     if(!template) return null;
     let browser = null;
     try {
         browser = await puppeteer.launch({
-            args: chromium.args,
+            args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
         });
         const page = await browser.newPage();
         await page.setViewport({ width: 1000, height: 1000 });
-        await page.goto('https://www.photopea.com', { waitUntil: 'networkidle2' });
+        await page.goto('https://www.photopea.com', { waitUntil: 'networkidle2', timeout: 60000 });
 
         const result = await page.evaluate(async (psdUrl, fonts, layers, inputs) => {
             return new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => reject('Generation Timed Out in Photopea'), 45000);
+                
                 window.addEventListener("message", (e) => {
-                    if (e.data instanceof ArrayBuffer) resolve(Array.from(new Uint8Array(e.data)));
-                    if (typeof e.data === 'string' && e.data.includes("Error:")) reject(e.data);
+                    if (e.data instanceof ArrayBuffer) {
+                        clearTimeout(timeout);
+                        resolve(Array.from(new Uint8Array(e.data)));
+                    }
+                    if (typeof e.data === 'string' && e.data.includes("Error:")) {
+                        clearTimeout(timeout);
+                        reject(e.data);
+                    }
                 });
 
                 async function run() {
-                    for (const f of fonts) {
-                        try { const r = await fetch(f); window.postMessage(await r.arrayBuffer(), "*"); } catch(e) {}
-                    }
-                    try { const p = await fetch(psdUrl); window.postMessage(await p.arrayBuffer(), "*"); } catch(e) {}
+                    try {
+                        for (const f of fonts) {
+                            const r = await fetch(f);
+                            window.postMessage(await r.arrayBuffer(), "*");
+                        }
+                        const p = await fetch(psdUrl);
+                        window.postMessage(await p.arrayBuffer(), "*");
 
-                    setTimeout(() => {
-                        const script = `
-                            var doc = app.activeDocument;
-                            function set(n, t) {
-                                if(!t) return;
-                                for(var i=0; i<doc.layers.length; i++){
-                                    if(doc.layers[i].name==n && doc.layers[i].kind==LayerKind.TEXT){
-                                        doc.layers[i].textItem.contents = t;
-                                        return;
-                                    }
-                                    if(doc.layers[i].typename == "LayerSet"){
-                                        var sub = doc.layers[i].layers;
-                                        for(var j=0; j<sub.length; j++){
-                                            if(sub[j].name==n && sub[j].kind==LayerKind.TEXT){
-                                                sub[j].textItem.contents = t;
-                                                return;
+                        setTimeout(() => {
+                            const script = `
+                                try {
+                                    var doc = app.activeDocument;
+                                    function set(lrs, n, t) {
+                                        if(!t) return false;
+                                        for(var i=0; i<lrs.length; i++){
+                                            var l = lrs[i];
+                                            if(l.name == n && l.kind == LayerKind.TEXT){
+                                                l.textItem.contents = t;
+                                                return true;
+                                            }
+                                            if(l.typename == "LayerSet") {
+                                                if(set(l.layers, n, t)) return true;
                                             }
                                         }
+                                        return false;
                                     }
-                                }
-                            }
-                            set("${layers.name}", "${inputs.name}");
-                            set("${layers.number}", "${inputs.number}");
-                            set("${layers.title}", "${inputs.title}");
-                            doc.saveToOE("jpg", 90);
-                        `;
-                        window.postMessage(script, "*");
-                    }, 4000);
+                                    set(doc.layers, "${layers.name}", "${inputs.name}");
+                                    set(doc.layers, "${layers.number}", "${inputs.number}");
+                                    set(doc.layers, "${layers.title}", "${inputs.title}");
+                                    doc.saveToOE("jpg", 90);
+                                } catch(e) { app.echoToOE("Error: " + e.toString()); }
+                            `;
+                            window.postMessage(script, "*");
+                        }, 5000); // Wait 5s for PSD to load
+                    } catch (err) { reject(err.toString()); }
                 }
                 run();
             });
@@ -93,27 +101,23 @@ async function renderPhotopea(templateId, data) {
     } finally { if(browser) await browser.close(); }
 }
 
-// Bot Logic
 bot.start((ctx) => {
     userState.delete(ctx.from.id);
     ctx.reply('🎨 Choose an option to start:', Markup.inlineKeyboard([
-        [Markup.button.callback('🖼️ Generate Logo', 'start_logo')],
-        [Markup.button.callback('📝 Generate Post', 'start_post')]
+        [Markup.button.callback('🖼️ Generate Logo', 'start_logo')]
     ]));
 });
 
-// Logo Flow
-bot.action('start_logo', async (ctx) => {
-    await ctx.answerCbQuery();
-    await ctx.reply('👇 SELECT A LOGO SYSTEM:', Markup.inlineKeyboard([
+bot.action('start_logo', (ctx) => {
+    ctx.answerCbQuery();
+    ctx.reply('👇 SELECT A LOGO SYSTEM:', Markup.inlineKeyboard([
         LOGO_SYSTEMS.map(s => Markup.button.callback(`Logo ${s.id}`, `sys_${s.id}`))
     ]));
 });
 
-bot.action(/^sys_(\d)$/, async (ctx) => {
+bot.action(/^sys_(\d)$/, (ctx) => {
     const sysId = ctx.match[1];
-    await ctx.answerCbQuery();
-    
+    ctx.answerCbQuery();
     const buttons = [];
     for (let i = 1; i <= 9; i+=3) {
         buttons.push([
@@ -122,19 +126,16 @@ bot.action(/^sys_(\d)$/, async (ctx) => {
             Markup.button.callback(`Char ${i+2}`, `char_${sysId}_${i+2}`)
         ]);
     }
-    
-    await ctx.reply(`🔽 SELECT A CHARACTER FOR LOGO ${sysId}:`, Markup.inlineKeyboard(buttons));
+    ctx.reply(`🔽 SELECT A CHARACTER FOR LOGO ${sysId}:`, Markup.inlineKeyboard(buttons));
 });
 
-bot.action(/^char_(\d)_(\d)$/, async (ctx) => {
+bot.action(/^char_(\d)_(\d)$/, (ctx) => {
     const [, sysId, charId] = ctx.match;
     userState.set(ctx.from.id, { step: 'WAITING_INPUT', templateId: `logo${sysId}_c${charId}` });
-    await ctx.answerCbQuery();
-    
+    ctx.answerCbQuery();
     const sampleText = "LOKAYA FX, 076 880 3361, GAMING EDITOR";
-    await ctx.reply(`Selected Logo ${sysId} - Char ${charId}!\n\nNow send your details in this format:\n\n` +
-                    `\`${sampleText}\` \n\n` +
-                    `*(Copy, paste and edit the text above)*`, { parse_mode: 'Markdown' });
+    ctx.reply(`Selected Logo ${sysId} Char ${charId}! Send details as:\n\n` +
+             `\`${sampleText}\``, { parse_mode: 'Markdown' });
 });
 
 bot.on('text', async (ctx) => {
@@ -142,35 +143,23 @@ bot.on('text', async (ctx) => {
     if (!state || state.step !== 'WAITING_INPUT') return;
 
     const parts = ctx.message.text.split(',').map(p => p.trim());
-    if (parts.length < 1) return ctx.reply('Please send at least a Name.');
-
-    const data = {
-        name: parts[0] || '',
-        number: parts[1] || '',
-        title: parts[2] || ''
-    };
+    const data = { name: parts[0] || '', number: parts[1] || '', title: parts[2] || '' };
 
     userState.delete(ctx.from.id);
-    await ctx.reply('🚀 Generating your masterpiece... Please wait around 20s.');
+    await ctx.reply('🚀 Generating... Please wait (30-40s)');
     await ctx.sendChatAction('upload_photo');
 
     try {
         const buf = await renderPhotopea(state.templateId, data);
-        if(buf) {
-            await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Successfully Generated! \nName: ${data.name}` });
-        } else {
-            throw new Error('No buffer returned');
-        }
+        if(buf) await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Done! Name: ${data.name}` });
     } catch (e) {
-        console.error(e);
-        await ctx.reply('❌ Error generating image. Please try again.');
+        await ctx.reply('❌ Error: ' + e.toString());
     }
 });
 
-// Vercel Export
 module.exports = async (req, res) => {
     try {
         if (req.method === 'POST') await bot.handleUpdate(req.body, res);
-        else res.status(200).send('Bot Active.');
-    } catch(e) { console.error(e); res.status(500).send('Internal Error'); }
+        else res.status(200).send('Bot Live');
+    } catch(e) { res.status(500).send('Err'); }
 };
