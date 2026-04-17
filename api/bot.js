@@ -13,24 +13,17 @@ const LOGO_SYSTEMS = [
 ];
 
 const TEMPLATES = {};
-// Pre-generate templates for logic
 for (let s = 1; s <= 3; s++) {
     for (let c = 1; c <= 9; c++) {
         TEMPLATES[`logo${s}_c${c}`] = {
+            id: `${s}_${c}`,
+            name: `Logo ${s} - Char ${c}`,
             psdUrl: `${BASE_URL}/logo-system/logo${s}-char/char${c}/psd/s${s}_c${c}.psd`,
             fonts: [`${BASE_URL}/assets/Muro.otf`],
             targetLayers: { name: 'LogoName', number: 'LogoNumber', title: 'LogoTitel' }
         };
     }
 }
-
-// Map for Post System (Simplified for now)
-TEMPLATES['post1'] = {
-    name: 'Account Store',
-    psdUrl: `${BASE_URL}/post-system/post1/psd/store%20post.psd`,
-    fonts: [`${BASE_URL}/assets/fonts/PROGRESSIVE%20SOUL.ttf`],
-    targetLayers: { name: 'name', number: 'number' }
-};
 
 // Initialize Bot
 const bot = new Telegraf(BOT_TOKEN);
@@ -39,14 +32,16 @@ const userState = new Map();
 // Helper: Process Rendering
 async function renderPhotopea(templateId, data) {
     const template = TEMPLATES[templateId];
+    if(!template) return null;
     let browser = null;
     try {
         browser = await puppeteer.launch({
-            args: [...chromium.args, "--no-sandbox"],
+            args: chromium.args,
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
         });
         const page = await browser.newPage();
+        await page.setViewport({ width: 1000, height: 1000 });
         await page.goto('https://www.photopea.com', { waitUntil: 'networkidle2' });
 
         const result = await page.evaluate(async (psdUrl, fonts, layers, inputs) => {
@@ -68,19 +63,30 @@ async function renderPhotopea(templateId, data) {
                         const script = `
                             var doc = app.activeDocument;
                             function set(n, t) {
+                                if(!t) return;
                                 for(var i=0; i<doc.layers.length; i++){
                                     if(doc.layers[i].name==n && doc.layers[i].kind==LayerKind.TEXT){
                                         doc.layers[i].textItem.contents = t;
+                                        return;
+                                    }
+                                    if(doc.layers[i].typename == "LayerSet"){
+                                        var sub = doc.layers[i].layers;
+                                        for(var j=0; j<sub.length; j++){
+                                            if(sub[j].name==n && sub[j].kind==LayerKind.TEXT){
+                                                sub[j].textItem.contents = t;
+                                                return;
+                                            }
+                                        }
                                     }
                                 }
                             }
-                            if("${inputs.name}") set("${layers.name}", "${inputs.name}");
-                            if("${inputs.number}") set("${layers.number}", "${inputs.number}");
-                            if("${inputs.title}") set("${layers.title}", "${inputs.title}");
-                            doc.saveToOE("png");
+                            set("${layers.name}", "${inputs.name}");
+                            set("${layers.number}", "${inputs.number}");
+                            set("${layers.title}", "${inputs.title}");
+                            doc.saveToOE("jpg", 90);
                         `;
                         window.postMessage(script, "*");
-                    }, 3000);
+                    }, 3500);
                 }
                 run();
             });
@@ -92,8 +98,8 @@ async function renderPhotopea(templateId, data) {
 // Bot Logic
 bot.start((ctx) => {
     userState.delete(ctx.from.id);
-    ctx.reply('Welcome to Lokaya Gfx! Choose an option:', Markup.inlineKeyboard([
-        [Markup.button.callback('🎨 Generate Logo', 'start_logo')],
+    ctx.reply('🎨 Choose an option to start:', Markup.inlineKeyboard([
+        [Markup.button.callback('🖼️ Generate Logo', 'start_logo')],
         [Markup.button.callback('📝 Generate Post', 'start_post')]
     ]));
 });
@@ -101,27 +107,33 @@ bot.start((ctx) => {
 // Logo Flow
 bot.action('start_logo', async (ctx) => {
     await ctx.answerCbQuery();
-    await ctx.reply('Choose a Logo System:');
-    for (const sys of LOGO_SYSTEMS) {
-        await ctx.replyWithPhoto(sys.preview, {
-            caption: `System: ${sys.name}`,
-            ...Markup.inlineKeyboard([Markup.button.callback(`Select ${sys.name}`, `sys_${sys.id}`)])
-        });
-    }
+    
+    // Send 3 systems as album
+    const media = LOGO_SYSTEMS.map(s => ({ type: 'photo', media: s.preview, caption: s.name }));
+    await ctx.replyWithMediaGroup(media);
+    
+    // Then send buttons
+    await ctx.reply('CHOOSE A LOGO SYSTEM:', Markup.inlineKeyboard([
+        LOGO_SYSTEMS.map(s => Markup.button.callback(s.name.split(' ')[0], `sys_${s.id}`))
+    ]));
 });
 
 bot.action(/^sys_(\d)$/, async (ctx) => {
     const sysId = ctx.match[1];
     await ctx.answerCbQuery();
-    await ctx.reply(`System ${sysId} Characters:`);
     
+    // Send 9 webp characters as album
     const media = [];
     for (let i = 1; i <= 9; i++) {
-        media.push({ type: 'photo', media: `${BASE_URL}/logo-system/logo${sysId}-char/char${i}/s${sysId}_c${i}.webp` });
+        media.push({ 
+            type: 'photo', 
+            media: `${BASE_URL}/logo-system/logo${sysId}-char/char${i}/s${sysId}_c${i}.webp`
+        });
     }
     await ctx.replyWithMediaGroup(media);
     
-    // Buttons in grid
+    // Character selection buttons in grid
+    const buttons = [];
     for (let i = 1; i <= 9; i+=3) {
         buttons.push([
             Markup.button.callback(`Char ${i}`, `char_${sysId}_${i}`),
@@ -129,53 +141,53 @@ bot.action(/^sys_(\d)$/, async (ctx) => {
             Markup.button.callback(`Char ${i+2}`, `char_${sysId}_${i+2}`)
         ]);
     }
-    await ctx.reply('Select a character:', Markup.inlineKeyboard(buttons));
+    await ctx.reply('SELECT A CHARACTER STYLE:', Markup.inlineKeyboard(buttons));
 });
 
 bot.action(/^char_(\d)_(\d)$/, async (ctx) => {
     const [, sysId, charId] = ctx.match;
-    userState.set(ctx.from.id, { step: 'NAME', templateId: `logo${sysId}_c${charId}`, data: {} });
+    userState.set(ctx.from.id, { step: 'WAITING_INPUT', templateId: `logo${sysId}_c${charId}` });
     await ctx.answerCbQuery();
-    await ctx.reply('Great! Please enter the **NAME** for your logo:');
+    
+    const sampleText = "LOKAYA FX, 076 880 3361, GAMING EDITOR";
+    await ctx.reply(`Selected Char ${charId}! Now send your details in this format:\n\n` +
+                    `\`${sampleText}\` \n\n` +
+                    `*(Copy, paste and edit the text above)*`, { parse_mode: 'Markdown' });
 });
 
-// Input handling logic
 bot.on('text', async (ctx) => {
     const state = userState.get(ctx.from.id);
-    if (!state) return;
+    if (!state || state.step !== 'WAITING_INPUT') return;
 
-    if (state.step === 'NAME') {
-        state.data.name = ctx.message.text;
-        state.step = 'NUMBER';
-        await ctx.reply('Now enter the **NUMBER**:');
-    } else if (state.step === 'NUMBER') {
-        state.data.number = ctx.message.text;
-        state.step = 'TITLE';
-        await ctx.reply('Finally, enter the **UNDERNAME TITLE**:');
-    } else if (state.step === 'TITLE') {
-        state.data.title = ctx.message.text;
-        state.step = 'PROCESSING';
-        const prog = await ctx.reply('🎨 Processing... Please wait 20-30s.');
-        
-        try {
-            const buf = await renderPhotopea(state.templateId, state.data);
-            await ctx.replyWithPhoto({ source: buf }, { caption: '✅ Your elite logo is ready!' });
-        } catch (e) {
-            await ctx.reply('❌ Error generating image. Please try again.');
+    const parts = ctx.message.text.split(',').map(p => p.trim());
+    if (parts.length < 1) return ctx.reply('Please send at least a Name.');
+
+    const data = {
+        name: parts[0] || '',
+        number: parts[1] || '',
+        title: parts[2] || ''
+    };
+
+    userState.delete(ctx.from.id);
+    const prog = await ctx.reply('🚀 Generating your masterpiece... 20s');
+
+    try {
+        const buf = await renderPhotopea(state.templateId, data);
+        if(buf) {
+            await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Done! \nName: ${data.name}` });
+        } else {
+            throw new Error('No buffer returned');
         }
-        userState.delete(ctx.from.id);
+    } catch (e) {
+        console.error(e);
+        await ctx.reply('❌ Error generating image. Please check your text format.');
     }
-});
-
-// Post Flow (Simple Placeholder)
-bot.action('start_post', (ctx) => {
-    ctx.answerCbQuery();
-    userState.set(ctx.from.id, { step: 'NAME', templateId: 'post1', data: {} });
-    ctx.reply('Generate Post selected. Enter the **NAME**:');
 });
 
 // Vercel Export
 module.exports = async (req, res) => {
-    if (req.method === 'POST') await bot.handleUpdate(req.body, res);
-    else res.status(200).send('Bot is live.');
+    try {
+        if (req.method === 'POST') await bot.handleUpdate(req.body, res);
+        else res.status(200).send('Bot Active.');
+    } catch(e) { console.error(e); res.status(500).send('Internal Error'); }
 };
