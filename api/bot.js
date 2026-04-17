@@ -112,10 +112,9 @@ bot.action('start_logo', async (ctx) => {
     const media = LOGO_SYSTEMS.map(s => ({ type: 'photo', media: s.preview, caption: s.name }));
     await ctx.replyWithMediaGroup(media);
     
-    // Then send buttons
-    await ctx.reply('CHOOSE A LOGO SYSTEM:', Markup.inlineKeyboard([
-        LOGO_SYSTEMS.map(s => Markup.button.callback(s.name.split(' ')[0], `sys_${s.id}`))
-    ]));
+    // Then send buttons using a safer mapping
+    const botButtons = LOGO_SYSTEMS.map(s => Markup.button.callback(`Logo ${s.id}`, `sys_${s.id}`));
+    await ctx.reply('👇 SELECT A LOGO SYSTEM:', Markup.inlineKeyboard([botButtons]));
 });
 
 bot.action(/^sys_(\d)$/, async (ctx) => {
