@@ -7,9 +7,9 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const BASE_URL = 'https://lokayafx.github.io/Free-editing-main';
 
 const LOGO_SYSTEMS = [
-    { id: '1', name: 'Phantom Elite', preview: `${BASE_URL}/assets/logos/s1_c1.png` },
-    { id: '2', name: 'Crimson Fury', preview: `${BASE_URL}/assets/logos/s2_c1.png` },
-    { id: '3', name: 'Frost Vyper', preview: `${BASE_URL}/assets/logos/s3_c1.png` }
+    { id: '1', name: 'Logo 1' },
+    { id: '2', name: 'Logo 2' },
+    { id: '3', name: 'Logo 3' }
 ];
 
 const TEMPLATES = {};
@@ -96,7 +96,7 @@ async function renderPhotopea(templateId, data) {
 // Bot Logic
 bot.start((ctx) => {
     userState.delete(ctx.from.id);
-    ctx.reply('🎨 Welcome! Choose an option to start:', Markup.inlineKeyboard([
+    ctx.reply('🎨 Choose an option to start:', Markup.inlineKeyboard([
         [Markup.button.callback('🖼️ Generate Logo', 'start_logo')],
         [Markup.button.callback('📝 Generate Post', 'start_post')]
     ]));
@@ -105,12 +105,6 @@ bot.start((ctx) => {
 // Logo Flow
 bot.action('start_logo', async (ctx) => {
     await ctx.answerCbQuery();
-    await ctx.reply('⏳ Loading Logo Systems...');
-    await ctx.sendChatAction('upload_photo');
-    
-    const media = LOGO_SYSTEMS.map(s => ({ type: 'photo', media: s.preview, caption: s.name }));
-    await ctx.replyWithMediaGroup(media);
-    
     await ctx.reply('👇 SELECT A LOGO SYSTEM:', Markup.inlineKeyboard([
         LOGO_SYSTEMS.map(s => Markup.button.callback(`Logo ${s.id}`, `sys_${s.id}`))
     ]));
@@ -119,17 +113,6 @@ bot.action('start_logo', async (ctx) => {
 bot.action(/^sys_(\d)$/, async (ctx) => {
     const sysId = ctx.match[1];
     await ctx.answerCbQuery();
-    await ctx.reply('⏳ Loading Character variations...');
-    await ctx.sendChatAction('upload_photo');
-    
-    const media = [];
-    for (let i = 1; i <= 9; i++) {
-        media.push({ 
-            type: 'photo', 
-            media: `${BASE_URL}/logo-system/logo${sysId}-char/char${i}/s${sysId}_c${i}.webp`
-        });
-    }
-    await ctx.replyWithMediaGroup(media);
     
     const buttons = [];
     for (let i = 1; i <= 9; i+=3) {
@@ -140,7 +123,7 @@ bot.action(/^sys_(\d)$/, async (ctx) => {
         ]);
     }
     
-    await ctx.reply(`✅ System ${sysId} loaded! SELECT A CHARACTER:`, Markup.inlineKeyboard(buttons));
+    await ctx.reply(`🔽 SELECT A CHARACTER FOR LOGO ${sysId}:`, Markup.inlineKeyboard(buttons));
 });
 
 bot.action(/^char_(\d)_(\d)$/, async (ctx) => {
@@ -149,7 +132,7 @@ bot.action(/^char_(\d)_(\d)$/, async (ctx) => {
     await ctx.answerCbQuery();
     
     const sampleText = "LOKAYA FX, 076 880 3361, GAMING EDITOR";
-    await ctx.reply(`Selected Char ${charId}! Now send your details in this format:\n\n` +
+    await ctx.reply(`Selected Logo ${sysId} - Char ${charId}!\n\nNow send your details in this format:\n\n` +
                     `\`${sampleText}\` \n\n` +
                     `*(Copy, paste and edit the text above)*`, { parse_mode: 'Markdown' });
 });
@@ -168,7 +151,7 @@ bot.on('text', async (ctx) => {
     };
 
     userState.delete(ctx.from.id);
-    const prog = await ctx.reply('🚀 Generating your logo... Please wait around 20s.');
+    await ctx.reply('🚀 Generating your masterpiece... Please wait around 20s.');
     await ctx.sendChatAction('upload_photo');
 
     try {
@@ -180,7 +163,7 @@ bot.on('text', async (ctx) => {
         }
     } catch (e) {
         console.error(e);
-        await ctx.reply('❌ Error generating image. Please try again or check your text.');
+        await ctx.reply('❌ Error generating image. Please try again.');
     }
 });
 
