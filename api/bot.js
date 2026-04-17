@@ -53,11 +53,9 @@ async function renderPhotopea(templateId, data) {
 
                 async function run() {
                     for (const f of fonts) {
-                        const r = await fetch(f);
-                        window.postMessage(await r.arrayBuffer(), "*");
+                        try { const r = await fetch(f); window.postMessage(await r.arrayBuffer(), "*"); } catch(e) {}
                     }
-                    const p = await fetch(psdUrl);
-                    window.postMessage(await p.arrayBuffer(), "*");
+                    try { const p = await fetch(psdUrl); window.postMessage(await p.arrayBuffer(), "*"); } catch(e) {}
 
                     setTimeout(() => {
                         const script = `
@@ -86,7 +84,7 @@ async function renderPhotopea(templateId, data) {
                             doc.saveToOE("jpg", 90);
                         `;
                         window.postMessage(script, "*");
-                    }, 3500);
+                    }, 4000);
                 }
                 run();
             });
@@ -98,7 +96,7 @@ async function renderPhotopea(templateId, data) {
 // Bot Logic
 bot.start((ctx) => {
     userState.delete(ctx.from.id);
-    ctx.reply('🎨 Choose an option to start:', Markup.inlineKeyboard([
+    ctx.reply('🎨 Welcome! Choose an option to start:', Markup.inlineKeyboard([
         [Markup.button.callback('🖼️ Generate Logo', 'start_logo')],
         [Markup.button.callback('📝 Generate Post', 'start_post')]
     ]));
@@ -107,21 +105,23 @@ bot.start((ctx) => {
 // Logo Flow
 bot.action('start_logo', async (ctx) => {
     await ctx.answerCbQuery();
+    await ctx.reply('⏳ Loading Logo Systems...');
+    await ctx.sendChatAction('upload_photo');
     
-    // Send 3 systems as album
     const media = LOGO_SYSTEMS.map(s => ({ type: 'photo', media: s.preview, caption: s.name }));
     await ctx.replyWithMediaGroup(media);
     
-    // Then send buttons using a safer mapping
-    const botButtons = LOGO_SYSTEMS.map(s => Markup.button.callback(`Logo ${s.id}`, `sys_${s.id}`));
-    await ctx.reply('👇 SELECT A LOGO SYSTEM:', Markup.inlineKeyboard([botButtons]));
+    await ctx.reply('👇 SELECT A LOGO SYSTEM:', Markup.inlineKeyboard([
+        LOGO_SYSTEMS.map(s => Markup.button.callback(`Logo ${s.id}`, `sys_${s.id}`))
+    ]));
 });
 
 bot.action(/^sys_(\d)$/, async (ctx) => {
     const sysId = ctx.match[1];
     await ctx.answerCbQuery();
+    await ctx.reply('⏳ Loading Character variations...');
+    await ctx.sendChatAction('upload_photo');
     
-    // Send 9 webp characters as album
     const media = [];
     for (let i = 1; i <= 9; i++) {
         media.push({ 
@@ -131,7 +131,6 @@ bot.action(/^sys_(\d)$/, async (ctx) => {
     }
     await ctx.replyWithMediaGroup(media);
     
-    // Character selection buttons in grid
     const buttons = [];
     for (let i = 1; i <= 9; i+=3) {
         buttons.push([
@@ -140,7 +139,8 @@ bot.action(/^sys_(\d)$/, async (ctx) => {
             Markup.button.callback(`Char ${i+2}`, `char_${sysId}_${i+2}`)
         ]);
     }
-    await ctx.reply('SELECT A CHARACTER STYLE:', Markup.inlineKeyboard(buttons));
+    
+    await ctx.reply(`✅ System ${sysId} loaded! SELECT A CHARACTER:`, Markup.inlineKeyboard(buttons));
 });
 
 bot.action(/^char_(\d)_(\d)$/, async (ctx) => {
@@ -168,18 +168,19 @@ bot.on('text', async (ctx) => {
     };
 
     userState.delete(ctx.from.id);
-    const prog = await ctx.reply('🚀 Generating your masterpiece... 20s');
+    const prog = await ctx.reply('🚀 Generating your logo... Please wait around 20s.');
+    await ctx.sendChatAction('upload_photo');
 
     try {
         const buf = await renderPhotopea(state.templateId, data);
         if(buf) {
-            await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Done! \nName: ${data.name}` });
+            await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Successfully Generated! \nName: ${data.name}` });
         } else {
             throw new Error('No buffer returned');
         }
     } catch (e) {
         console.error(e);
-        await ctx.reply('❌ Error generating image. Please check your text format.');
+        await ctx.reply('❌ Error generating image. Please try again or check your text.');
     }
 });
 
