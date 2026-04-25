@@ -30,7 +30,7 @@ const userState = new Map();
 
 async function renderPhotopea(templateId, data) {
     const template = TEMPLATES[templateId];
-    if(!template) return null;
+    if (!template) return null;
     let browser = null;
     try {
         browser = await puppeteer.launch({
@@ -45,7 +45,7 @@ async function renderPhotopea(templateId, data) {
         const result = await page.evaluate(async (psdUrl, fonts, layers, inputs) => {
             return new Promise((resolve, reject) => {
                 const timeout = setTimeout(() => reject('Generation Timed Out in Photopea'), 45000);
-                
+
                 window.addEventListener("message", (e) => {
                     if (e.data instanceof ArrayBuffer) {
                         clearTimeout(timeout);
@@ -98,7 +98,7 @@ async function renderPhotopea(templateId, data) {
             });
         }, template.psdUrl, template.fonts, template.targetLayers, data);
         return Buffer.from(result);
-    } finally { if(browser) await browser.close(); }
+    } finally { if (browser) await browser.close(); }
 }
 
 bot.start((ctx) => {
@@ -119,11 +119,11 @@ bot.action(/^sys_(\d)$/, (ctx) => {
     const sysId = ctx.match[1];
     ctx.answerCbQuery();
     const buttons = [];
-    for (let i = 1; i <= 9; i+=3) {
+    for (let i = 1; i <= 9; i += 3) {
         buttons.push([
             Markup.button.callback(`Char ${i}`, `char_${sysId}_${i}`),
-            Markup.button.callback(`Char ${i+1}`, `char_${sysId}_${i+1}`),
-            Markup.button.callback(`Char ${i+2}`, `char_${sysId}_${i+2}`)
+            Markup.button.callback(`Char ${i + 1}`, `char_${sysId}_${i + 1}`),
+            Markup.button.callback(`Char ${i + 2}`, `char_${sysId}_${i + 2}`)
         ]);
     }
     ctx.reply(`🔽 SELECT A CHARACTER FOR LOGO ${sysId}:`, Markup.inlineKeyboard(buttons));
@@ -135,7 +135,7 @@ bot.action(/^char_(\d)_(\d)$/, (ctx) => {
     ctx.answerCbQuery();
     const sampleText = "LOKAYA FX, 076 880 3361, GAMING EDITOR";
     ctx.reply(`Selected Logo ${sysId} Char ${charId}! Send details as:\n\n` +
-             `\`${sampleText}\``, { parse_mode: 'Markdown' });
+        `\`${sampleText}\``, { parse_mode: 'Markdown' });
 });
 
 bot.on('text', async (ctx) => {
@@ -151,7 +151,7 @@ bot.on('text', async (ctx) => {
 
     try {
         const buf = await renderPhotopea(state.templateId, data);
-        if(buf) await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Done! Name: ${data.name}` });
+        if (buf) await ctx.replyWithPhoto({ source: buf }, { caption: `✅ Done! Name: ${data.name}` });
     } catch (e) {
         await ctx.reply('❌ Error: ' + e.toString());
     }
@@ -161,5 +161,5 @@ module.exports = async (req, res) => {
     try {
         if (req.method === 'POST') await bot.handleUpdate(req.body, res);
         else res.status(200).send('Bot Live');
-    } catch(e) { res.status(500).send('Err'); }
+    } catch (e) { res.status(500).send('Err'); }
 };

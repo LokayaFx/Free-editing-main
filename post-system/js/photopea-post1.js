@@ -191,12 +191,17 @@ async function renderPost(userData) {
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
+        link.style.display = 'none';
         link.href = url;
         link.download = `${userData.name1 || 'Post'}_AccountStore.png`;
+        document.body.appendChild(link);
         link.click();
 
         console.log("Download triggered, cleaning up...");
-        URL.revokeObjectURL(url);
+        setTimeout(() => {
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }, 100);
 
         return true;
     } catch (error) {

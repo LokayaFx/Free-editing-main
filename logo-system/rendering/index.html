@@ -137,8 +137,27 @@
                         clearInterval(statusInterval);
                         document.getElementById('progress-fill').style.width = '100%';
                         document.getElementById('percentage').textContent = '100%';
-                        document.getElementById('status').textContent = 'Download started!';
-                        setTimeout(() => { window.location.href = backUrl; }, 2500);
+                        document.getElementById('status').textContent = 'Finished!';
+                        
+                        // Show a button in case automatic download was blocked
+                        const btnContainer = document.createElement('div');
+                        btnContainer.style.marginTop = '20px';
+                        btnContainer.innerHTML = `
+                            <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 15px;">Your logo is ready. If the download didn't start automatically, click below:</p>
+                            <button id="manual-download-btn" class="btn">Download Now</button>
+                            <a href="${backUrl}" class="btn" style="background: rgba(255,255,255,0.1); margin-left:10px;">Done</a>
+                        `;
+                        document.querySelector('.render-container').appendChild(btnContainer);
+
+                        document.getElementById('manual-download-btn').onclick = () => {
+                            renderLogo(userData); // This will re-trigger the download (already loaded in same renderer instance)
+                        };
+
+                        setTimeout(() => { 
+                            if (!document.getElementById('manual-download-btn').clicked) {
+                                // optional: window.location.href = backUrl; 
+                            }
+                        }, 10000);
                     } else {
                         throw new Error('renderLogo returned false');
                     }

@@ -158,10 +158,17 @@ async function renderLogo(userData) {
         const blob = new Blob([imageBuffer], { type: 'image/png' });
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement('a');
+        a.style.display = 'none';
         a.href     = url;
         a.download = `lokaya-logo2-c${charN}.png`;
+        document.body.appendChild(a);
         a.click();
-        URL.revokeObjectURL(url);
+        
+        // Delay revocation
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
 
         console.log('=== LOGO 2 GENERATION DONE ===');
         return true;

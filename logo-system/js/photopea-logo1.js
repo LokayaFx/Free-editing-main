@@ -15,6 +15,10 @@ class PhotopeaLogoRenderer {
 
     init() {
         return new Promise((resolve) => {
+            if (this.iframe) {
+                if (this.appReady) return resolve(true);
+            }
+
             this.iframe = document.createElement('iframe');
             this.iframe.id = 'photopea-app';
             this.iframe.src = 'https://www.photopea.com';
@@ -153,10 +157,17 @@ async function renderLogo(userData) {
         const blob = new Blob([imageBuffer], { type: 'image/png' });
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement('a');
+        a.style.display = 'none';
         a.href     = url;
         a.download = `lokaya-logo1-c${charN}.png`;
+        document.body.appendChild(a);
         a.click();
-        URL.revokeObjectURL(url);
+        
+        // Delay revocation to ensure download starts in all browsers
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
 
         console.log('=== LOGO GENERATION DONE ===');
         return true;
